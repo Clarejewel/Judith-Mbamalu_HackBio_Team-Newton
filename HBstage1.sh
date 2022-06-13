@@ -37,3 +37,18 @@ wget https://github.com/josoga2/yt-dataset/blob/main/dataset/raw_reads/Drysdale_
 #create a folder named output
 cd ..
 mkdir output
+#create a folder for each software's output
+mkdir qc_output
+mkdir trimming_output
+mkdir bwa_output
+
+#run fastqc on listed dataset
+fastqc ~/listed_dataset/*.fastg.gz
+cd listed_dataset/
+ls
+mv *.html *.zip ~/output/qc_output
+cd ~/output/qc_output
+
+#run fastp on the listed dataset to trim
+cd trimming_output
+
