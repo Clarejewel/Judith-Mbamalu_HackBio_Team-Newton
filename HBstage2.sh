@@ -1,8 +1,8 @@
 #!/bin/bash
 #login to the server using ssh by downloading putty from putty.org, inputting the ip address and password
 #Alternatively, you could just go on cloud and 
-ssh einstein@7.tcp.eu.ngrok.io -p 18467
-#password: einstein
+ssh server address - port
+#password:
 
 
 #Create my folder within team newton
@@ -106,7 +106,7 @@ bwa mem -R '@RG\tID:231336\tSM:Tumor' reference/hg19.chr5_12_17.fa trimmed_reads
  for sample in `cat list.txt`
 do
         #Convert SAM to BAM and sort it 
-        samtools view -@ 20 -S -b Mapping/${sample}.sam | samtools sort -@ 32 > Mapping/${sample}.sorted.bam
+        samtools view -@ 20 -S -b Mapping/${sample}.sam | samtools sort -n -@ 32 > Mapping/${sample}.sorted.bam
         
         #Index BAM file
         samtools index Mapping/${sample}.sorted.bam
@@ -120,12 +120,12 @@ do
 done
 #remove pcr duplicates that can cause false SNPs
 #use the command markdup
-for sample in `cat list.txt`
+for sample in 'cat list.txt'
 do
-	samtools collate -o Mapping/${sample}.namecollate.bam Mapping/${sample}.filtered1.bam
-        samtools fixmate -m Mapping/${sample}.namecollate.bam Mapping/${sample}.fixmate.bam
-        samtools sort -@ 32 -o Mapping/${sample}.positionsort.bam Mapping/${sample}.fixmate.bam
-        samtools markdup -@32 -r Mapping/${sample}.positionsort.bam Mapping/${sample}.clean.bam
+    samtools collate Mapping/${sample}.filtered1.bam Mapping/${sample}.namecollate
+    samtools fixmate -m Mapping/${sample}.namecollate.bam Mapping/${sample}.fixmate.bam
+    samtools sort -@ 32 -o Mapping/${sample}.positionsort.bam Mapping/${sample}.fixmate.bam
+    samtools markdup -@ 32 -r Mapping/${sample}.positionsort.bam Mapping/${sample}.clean.bam
 done
 
 #Left Align BAM
