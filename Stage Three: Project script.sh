@@ -1,6 +1,9 @@
-#!/usr/bin/env bash
 #create script to download each region
+
+#!/usr/bin/env bash
 #1. European Region (Greece)
+mkdir greece
+cd greece
 mkdir raw_data
 nano gr_downloader.sh
 #!/usr/bin/env bash
@@ -18,6 +21,8 @@ curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR860/009/SRR8607469/SRR8607469_2.fa
 
 
 #2.	Eastern Mediteranian Region (Pakistan)
+mkdir pakistan
+cd pakistan
 mkdir raw_data
 nano pak_downloader.sh
 #!/usr/bin/env bash
@@ -36,6 +41,8 @@ curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR130/054/SRR13007254/SRR13007254_2.
 
 
 #3. 	African Region (AFR) (South Africa)
+mkdir southafrica
+cd southafrica
 mkdir raw_data
 
 nano sa_downloader.sh
@@ -55,7 +62,9 @@ curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR638/008/ERR6384998/ERR6384998_2.fa
 
 
 #4.	Region of the Americas (USA)
-mkdir rawdata
+mkdir unitedstates
+cd unitedstates
+mkdir raw_data
 nano us_downloader.sh
 #!/usr/bin/env bash
 
@@ -73,7 +82,9 @@ curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR141/064/SRR14108564/SRR14108564_2.
 
 
 #5. Western Pacific Region (WPR) (Vietnam)
-mkdir rawdata
+mkdir vietnam
+cd vietnam
+mkdir raw_data
 nano viet_downloader.sh
 #!/usr/bin/env bash
 
@@ -157,7 +168,6 @@ do
     --html greece/trimmed_data/${sample}_fastp.html
 done
 
-
 pak_samples=( 
   "SRR13007255_PAK"
   "SRR13007251_PAK"
@@ -196,6 +206,7 @@ do
     --html southafrica/trimmed_data/${sample}_fastp.html
 done
 
+
 us_samples=(
   "SRR14108566_US"
   "SRR14108555_US"
@@ -214,6 +225,7 @@ do
     -O unitedstates/trimmed_data/${sample}_trimmed_2.fastq.gz \
     --html unitedstates/trimmed_data/${sample}_fastp.html
 done
+
 
 
 viet_samples=(
@@ -247,6 +259,7 @@ mkdir -p southafrica/assembly
 mkdir -p unitedstates/assembly
 mkdir -p vietnam/assembly
 
+#Assemble Greece dataset
 
 greece_samples=(
   "SRR8607460_GR"
@@ -267,6 +280,8 @@ do
 done
 
 
+#Assemble Pakistan dataset
+
 pak_samples=( 
   "SRR13007255_PAK"
   "SRR13007251_PAK"
@@ -282,6 +297,8 @@ do
    -2 pakistan/trimmed_reads/${sample}_trimmed_2.fastq.gz \
    -o pakistan/assembly/${sample}
 done
+
+#Assemble South Africa dataset
 
 sa_samples=(
   "ERR6384999_SA"
@@ -300,6 +317,8 @@ do
 done
 
 
+#Assemble United States dataset
+
 us_samples=(
   "SRR14108566_US"
   "SRR14108555_US"
@@ -315,6 +334,8 @@ do
    -2 unitedstates/trimmed_reads/${sample}_trimmed_2.fastq.gz \
    -o unitedstates/assembly/${sample}
 done
+
+#Assemble vietnam dataset
 
 viet_samples=(
   "SRR6656609_viet"
