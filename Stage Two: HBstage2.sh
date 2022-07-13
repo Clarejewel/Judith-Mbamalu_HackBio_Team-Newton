@@ -1,10 +1,9 @@
-#!/bin/bash
 #login to the server using ssh by downloading putty from putty.org, inputting the ip address and password
 #Alternatively, you could just go on cloud and 
 ssh server address - port
 #password:
 
-
+#!/bin/bash
 #Create my folder within team newton
 cd newton
 mkdir judith
@@ -128,23 +127,23 @@ do
     samtools markdup -@ 32 -r Mapping/${sample}.positionsort.bam Mapping/${sample}.clean.bam
 done
 
-#Left Align BAM
+#Left Align BAM (copy reference folder to Mapping folder)
 for sample in `cat list.txt`
 do      
-        cat Mapping/${sample}.clean.bam  | bamleftalign -f hg19.chr5_12_17.fa -m 5 -c > Mapping/${sample}.leftAlign.bam
+        cat Mapping/${sample}.clean.bam  | bamleftalign -f reference/hg19.chr5_12_17.fa -m 5 -c > Mapping/${sample}.leftAlign.bam
 
 #-c - compressed, -m - max-iterations
 
 #Recalibrate read mapping qualities
 for sample in `cat list.txt`
 do
-        samtools calmd -@ 32 -b Mapping/${sample}.leftAlign.bam hg19.chr5_12_17.fa > Mapping/${sample}.recalibrate.bam
+        samtools calmd -@ 32 -b Mapping/${sample}.leftAlign.bam reference/hg19.chr5_12_17.fa > Mapping/${sample}.recalibrate.bam
 done
 
 #Refilter read mapping qualities
 for sample in `cat list.txt`
 do
-        bamtools filter -in Mapping/${sample}.recalibrate.bam -mapQuality <=254 > Mapping/${sample}.refilter.bam
+        bamtools filter -in Mapping/${sample}.recalibrate.bam -mapQuality "<=254" > Mapping/${sample}.refilter.bam
 done
 
 #Variant calling and classification
@@ -159,7 +158,7 @@ do
 done
 
 #Call variants
-java -jar VarScan.v2.3.9.jar somatic Variants/SLGFSK-N_231335.pileup \
+varscan somatic Variants/SLGFSK-N_231335.pileup \
         Variants/SLGFSK-T_231336.pileup Variants/SLGFSK \
         --normal-purity 1  --tumor-purity 0.5 --output-vcf 1 
 
@@ -181,7 +180,7 @@ wget https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip
 unzip snpEff_latest_core.zip
 		
 #download snpEff database
-java -jar snpEff.jar download hg19
+ snpEff download hg19
 
 #annotate variants
-java -Xmx8g -jar snpEff/snpEff.jar hg19 Variants/SLGFSK.vcf > Variants/SLGFSK.ann.vcf
+ snpEff hg19 Variants/SLGFSK.vcf > Variants/SLGFSK.ann.vcf
