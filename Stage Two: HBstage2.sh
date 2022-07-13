@@ -169,7 +169,8 @@ bgzip Variants/SLGFSK.snp.vcf > Variants/SLGFSK.snp.vcf.gz
 bgzip Variants/SLGFSK.indel.vcf > Variants/SLGFSK.indel.vcf.gz
 tabix Variants/SLGFSK.snp.vcf.gz
 tabix Variants/SLGFSK.indel.vcf.gz
-bcftools merge Variants/SLGFSK.snp.vcf.gz Variants/SLGFSK.indel.vcf.gz > Variants/SLGFSK.vcf
+bcftools merge Variants/SLGFSK.snp.vcf.gz Variants/SLGFSK.indel.vcf.gz > Variants/SLGFSK.vcf --force-samples
+#(I added the "--force-samples" because I kept getting "Error: Duplicate sample names (NORMAL), use --force-samples to proceed anyway")
 
 #Variant Annotation
 #Functional Annotation using SnpEff
@@ -180,7 +181,7 @@ wget https://snpeff.blob.core.windows.net/versions/snpEff_latest_core.zip
 unzip snpEff_latest_core.zip
 		
 #download snpEff database
- snpEff download hg19
+java -jar snpEff.jar download -v hg19
 
 #annotate variants
  snpEff hg19 Variants/SLGFSK.vcf > Variants/SLGFSK.ann.vcf
